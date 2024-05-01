@@ -1,4 +1,4 @@
-from openai import Client
+from googlegenerativeai import Client
 import os
 from dehashed_api import consultar_dominio_dehashed
 import json
@@ -27,14 +27,14 @@ Establece una conversación normal
 """
 RouterPrompt = "Eres un asistente de ciberseguridad que se encarga de clasificar metadatos en funciones para OSINT"
 
-# Clase principal DarkGPT que encapsula la funcionalidad del modelo GPT y la interacción con la API de OpenAI.
+# Clase principal DarkGPT que encapsula la funcionalidad del modelo GPT y la interacción con la API de googlegenerativeai.
 class DarkGPT:
     # Método inicializador de la clase.
     def __init__(self):
-        self.model_name = os.getenv("GPT_MODEL_NAME")  # Identificador del modelo de OpenAI GPT a utilizar.
+        self.model_name = os.getenv("GPT_MODEL_NAME")  # Identificador del modelo de googlegenerativeai GPT a utilizar.
         self.temperature = 0.7  # Controla la aleatoriedad de las respuestas. Valores más bajos hacen que las respuestas sean más deterministas.
         self.functions = Leak_Function  # Funciones personalizadas para que el modelo las utilice.
-        self.openai_client = Client(api_key=os.getenv("OPENAI_API_KEY"))  # Configuración del cliente OpenAI con la clave API.
+        self.googlegenerativeai_client = Client(api_key=os.getenv("googlegenerativeai_API_KEY"))  # Configuración del cliente googlegenerativeai con la clave API.
     
     # Método para ejecutar una llamada a función y procesar su salida.
     def execute_function_call(self, function_prompts: list, message):
@@ -47,7 +47,7 @@ class DarkGPT:
         # Genera una respuesta determinista para la llamada a función.
         functions_prompts = mensajes(message)
       
-        response = self.openai_client.chat.completions.create(model="gpt-4",
+        response = self.googlegenerativeai_client.chat.completions.create(model="gpt-4",
                                                               temperature=0,
                                                               messages=functions_prompts,
                                                               functions=self.functions)
@@ -84,7 +84,7 @@ class DarkGPT:
         historial_json = self.process_history_with_function_output(historial, function_output)
        
         # Genera una respuesta del modelo.
-        respuesta = self.openai_client.chat.completions.create(model=self.model_name,
+        respuesta = self.googlegenerativeai_client.chat.completions.create(model=self.model_name,
                                                                temperature=self.temperature,
                                                                messages=historial_json,
                                                                stream=True)

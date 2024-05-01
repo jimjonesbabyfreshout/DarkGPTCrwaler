@@ -19,6 +19,8 @@ hecho por: @luijait_
 print(banner)
 
 # Definición de la función principal
+
+
 def main():
     # Creación de una instancia de DarkGPT
     darkgpt = DarkGPT()
@@ -27,7 +29,7 @@ def main():
     # Inicio de la shell conversacional
     conversational_shell.Start()
 
+
 # Punto de entrada principal para ejecutar la aplicación
 if __name__ == "__main__":
     main()
-
